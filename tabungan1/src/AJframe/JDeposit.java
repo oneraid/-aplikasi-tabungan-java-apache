@@ -3,9 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package AJframe;
+import Transaction.DepositController;
 import static Connection.Koneksi.*;
 import Transaction.Deposit;
-import CollegeStudent.DataMahasiswa;
+import CollegeStudent.Mahasiswa;
 import java.sql.*;
 import java.text.*;
 import javax.swing.*;
@@ -16,9 +17,14 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JDeposit extends javax.swing.JFrame {
 
-    /**
-     * Creates new form menuSetoran
-     */
+    Deposit deposit_model = new Deposit();
+    DepositController deposit_controller = new DepositController(deposit_model, this);
+    public DefaultTableModel table_deposit = new DefaultTableModel();
+    public String pIdsetor, pNim, pNama;
+    public Date pDate;
+    public int pDsaldo;
+    public String kodeTransaksi;
+            
     public JDeposit() {
         initComponents();
         cekKoneksi();
@@ -26,18 +32,16 @@ public class JDeposit extends javax.swing.JFrame {
         showData();
         clearData();
     }
-    
-    public DefaultTableModel tx_setor = new DefaultTableModel();
 
     
     private void initTable() {
-       tx_setor = new DefaultTableModel();
-       tblst.setModel(tx_setor);
-       tx_setor.addColumn("ID Setor");
-       tx_setor.addColumn("NIM");
-       tx_setor.addColumn("Nama");
-       tx_setor.addColumn("Tanggal");
-       tx_setor.addColumn("Jumlah");
+       table_deposit = new DefaultTableModel();
+       tblst.setModel(table_deposit);
+       table_deposit.addColumn("ID Setor");
+       table_deposit.addColumn("NIM");
+       table_deposit.addColumn("Nama");
+       table_deposit.addColumn("Tanggal");
+       table_deposit.addColumn("Jumlah");
    }
     
     private void clearData(){
@@ -48,25 +52,13 @@ public class JDeposit extends javax.swing.JFrame {
         Jurusanlb.setText("");
         txAmount.setText("");
         idsetorLbl.setText("");
+        saldo.setText("");
     }
     
     public void showData(){
-        tx_setor.getDataVector().removeAllElements();
-        tx_setor.fireTableDataChanged();
-        try {
-        ResultSet result_data = Deposit.getData();
-        while(result_data.next()){
-        Object[] obj = new Object[5];
-        obj[0] = result_data.getString("id_setor");
-        obj[1] = result_data.getString("nim");
-        obj[2] = result_data.getString("nama");
-        obj[3] = result_data.getString("tanggal");
-        obj[4] = result_data.getString("dsaldo");
-        tx_setor.addRow(obj);
-        }
-        } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, "Error show data"+ e.getMessage());
-        }
+        table_deposit.getDataVector().removeAllElements();
+        table_deposit.fireTableDataChanged();
+        deposit_controller.show();
     }
     
     
@@ -324,23 +316,19 @@ public class JDeposit extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Masukkan Nim atau Jumlah");
         }else{
                 try {
-                Deposit.kodesetor(idsetorLbl);
-                String kodeTransaksi = idsetorLbl.getText();
-
-
-                String nim = txtNIM.getText();
-                String nama = Namelb.getText();
-                int dSaldo = Integer.parseInt(txAmount.getText());
+                deposit_controller.idtr(idsetorLbl);
+                pIdsetor = idsetorLbl.getText();
+                
+                pNim = txtNIM.getText();
+                pNama = Namelb.getText();
+                pDsaldo = Integer.parseInt(txAmount.getText());
 
                 java.util.Date date = new java.util.Date();
-                java.sql.Date skrg = new java.sql.Date(date.getTime());
-                SimpleDateFormat frm=new SimpleDateFormat("yyyy-MM-dd");
-                String tanggal=frm.format(skrg);
-
-                Deposit dp = new Deposit(kodeTransaksi,nim, nama, skrg, dSaldo);
-                Deposit.InsertDeposit(dp);
-
-                DataMahasiswa.updateDsaldoMahasiswa(nim, dSaldo);
+                pDate = new java.sql.Date(date.getTime());
+                
+                deposit_controller.insert();
+                deposit_controller.updatesaldo(pNim, pDsaldo);
+                
                 JOptionPane.showMessageDialog(this, "Sukses ditambah");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e);
@@ -356,7 +344,7 @@ public class JDeposit extends javax.swing.JFrame {
 
         try {
             
-            DataMahasiswa.tampildata(txtNIM, Namelb, Jurusanlb, JeniskelLb, saldo);
+            Mahasiswa.tampildata(txtNIM, Namelb, Jurusanlb, JeniskelLb, saldo);
         } catch (Exception e) {
         }
     }//GEN-LAST:event_CheckBtnActionPerformed
@@ -431,7 +419,7 @@ public class JDeposit extends javax.swing.JFrame {
     private javax.swing.JLabel JeniskelLb;
     private javax.swing.JLabel Jurusanlb;
     private javax.swing.JLabel Namelb;
-    private javax.swing.JLabel idsetorLbl;
+    public javax.swing.JLabel idsetorLbl;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

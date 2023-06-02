@@ -5,16 +5,24 @@
 package AJframe;
 import static Connection.Koneksi.*;
 import Transaction.Deposit;
-import CollegeStudent.DataMahasiswa;
+import CollegeStudent.Mahasiswa;
 import Transaction.Withdraw;
+import Transaction.WithdrawController;
 import java.sql.*;
 import java.text.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 
-
 public class Jwithdraw extends javax.swing.JFrame {
+
+    Withdraw withdraw_model = new Withdraw();
+    WithdrawController withdraw_controller = new WithdrawController(withdraw_model, this);
+    public DefaultTableModel table_withdraw = new DefaultTableModel();
+    
+    public String pIdTarik, pNim, pNama;
+    public Date pDate;
+    public int pWSaldo;
 
     
     public Jwithdraw() {
@@ -26,18 +34,17 @@ public class Jwithdraw extends javax.swing.JFrame {
     }
 
     
-    
-    public DefaultTableModel tx_setor = new DefaultTableModel();
+
 
     
     private void initTable() {
-       tx_setor = new DefaultTableModel();
-       tblst.setModel(tx_setor);
-       tx_setor.addColumn("ID Tarik");
-       tx_setor.addColumn("NIM");
-       tx_setor.addColumn("Nama");
-       tx_setor.addColumn("Tanggal");
-       tx_setor.addColumn("Jumlah");
+       table_withdraw = new DefaultTableModel();
+       tblst.setModel(table_withdraw);
+       table_withdraw.addColumn("ID Tarik");
+       table_withdraw.addColumn("NIM");
+       table_withdraw.addColumn("Nama");
+       table_withdraw.addColumn("Tanggal");
+       table_withdraw.addColumn("Jumlah");
    }
     
     private void clearData(){
@@ -48,11 +55,12 @@ public class Jwithdraw extends javax.swing.JFrame {
         idsetorLbl.setText("");
         JeniskelLb.setText("");
         Jurusanlb.setText("");
+        saldo.setText("");
     }
     
     public void showData(){
-        tx_setor.getDataVector().removeAllElements();
-        tx_setor.fireTableDataChanged();
+        table_withdraw.getDataVector().removeAllElements();
+        table_withdraw.fireTableDataChanged();
         try {
         ResultSet result_data = Withdraw.getData();
         while(result_data.next()){
@@ -62,7 +70,7 @@ public class Jwithdraw extends javax.swing.JFrame {
         obj[2] = result_data.getString("nama");
         obj[3] = result_data.getString("tanggal");
         obj[4] = result_data.getString("wsaldo");
-        tx_setor.addRow(obj);
+        table_withdraw.addRow(obj);
         }
         } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Error show data"+ e.getMessage());
@@ -322,7 +330,7 @@ public class Jwithdraw extends javax.swing.JFrame {
 
         try {
 
-            DataMahasiswa.tampildata(txtNIM, Namelb, Jurusanlb, JeniskelLb, saldo);
+            Mahasiswa.tampildata(txtNIM, Namelb, Jurusanlb, JeniskelLb, saldo);
         } catch (Exception e) {
         }
     }//GEN-LAST:event_CheckBtnActionPerformed
@@ -338,22 +346,19 @@ public class Jwithdraw extends javax.swing.JFrame {
         }
         else{
             try {
-                Withdraw.kodetarik(idsetorLbl);
-                String kodeTransaksi = idsetorLbl.getText();
+                withdraw_controller.idtr(idsetorLbl);
+                pIdTarik = idsetorLbl.getText();
 
-                String nim = txtNIM.getText();
-                String nama = Namelb.getText();
-                int wSaldo = Integer.parseInt(txAmount.getText());
+                pNim = txtNIM.getText();
+                pNama = Namelb.getText();
+                pWSaldo = Integer.parseInt(txAmount.getText());
 
                 java.util.Date date = new java.util.Date();
-                java.sql.Date skrg = new java.sql.Date(date.getTime());
-                SimpleDateFormat frm=new SimpleDateFormat("yyyy-MM-dd");
-                String tanggal=frm.format(skrg);
+                pDate = new java.sql.Date(date.getTime());
 
-                Withdraw wd = new Withdraw(kodeTransaksi,nim, nama, skrg, wSaldo);
-                Withdraw.InsertWithdraw(wd);
-
-                DataMahasiswa.updateWsaldoMahasiswa(nim, wSaldo);
+                withdraw_controller.insert();
+                withdraw_controller.updatesaldo(pNim, pWSaldo);
+                
                 JOptionPane.showMessageDialog(this, "Sukses ditambah");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e);

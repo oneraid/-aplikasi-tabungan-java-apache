@@ -13,11 +13,26 @@ public class Withdraw extends Transaksi{
     String id_tarik;
     int wsaldo;
     
-    public Withdraw(String pIdTarik, String pNim, String pNama,Date pDate,  int pWSaldo){
-        super(pNim, pNama, pDate);
-        this.id_tarik = pIdTarik;
-        this.wsaldo = pWSaldo;
+    public Withdraw(){
     }
+
+    public String getId_tarik() {
+        return id_tarik;
+    }
+
+    public void setId_tarik(String id_tarik) {
+        this.id_tarik = id_tarik;
+    }
+
+    public int getWsaldo() {
+        return wsaldo;
+    }
+
+    public void setWsaldo(int wsaldo) {
+        this.wsaldo = wsaldo;
+    }
+    
+    
     
     public static ResultSet getData(){
      try {
@@ -62,6 +77,20 @@ public class Withdraw extends Transaksi{
         } catch (Exception e) 
         {
             System.out.println("Eror : "+e.getMessage());
+        }
+    }
+    
+    public static void updateWsaldoMahasiswa(String nim, int tsaldoBaru) {
+    try {
+        String query = "UPDATE Mahasiswa SET tsaldo = tsaldo - ? WHERE nim = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, tsaldoBaru);
+        stmt.setString(2, nim);
+        stmt.executeUpdate();
+        System.out.println("Tsaldo mahasiswa dengan NIM " + nim + " berhasil diupdate menjadi " + tsaldoBaru);
+        } catch (SQLException e) {
+            System.out.println("Gagal mengupdate tsaldo mahasiswa dengan NIM " + nim);
+            e.printStackTrace();
         }
     }
     

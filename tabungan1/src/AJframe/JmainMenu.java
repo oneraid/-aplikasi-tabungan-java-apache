@@ -105,7 +105,7 @@ public class JmainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void DataMhsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DataMhsBtnActionPerformed
-        new JDataMahasiswa().setVisible(true);
+        new JMahasiswa().setVisible(true);
         this.dispose();                  
     }//GEN-LAST:event_DataMhsBtnActionPerformed
 

@@ -8,22 +8,37 @@ import javax.swing.*;
  *
  * @author ridhw
  */
-public class DataMahasiswa {
-    String nim;
-    String nama;
-    String jenis_kelamin;
-    String jurusan;
+public class Mahasiswa extends Student{
     int tsaldo;
     String status;
         
-    public DataMahasiswa(String pNim, String pNama, String pJenisKelamin, String pJurusan,int pTSaldo, String pStatus){
-        this.nim = pNim;
-        this.nama = pNama;
-        this.jenis_kelamin = pJenisKelamin;
-        this.jurusan = pJurusan;
-        this.tsaldo = pTSaldo;
-        this.status = pStatus;
+//    public Mahasiswa(String pNim, String pNama, String pJenisKelamin, String pJurusan,int pTSaldo, String pStatus){
+//        super(pNim,pNama,pJenisKelamin,pJurusan);
+//        this.tsaldo = pTSaldo;
+//        this.status = pStatus;
+//    }
+    
+    public Mahasiswa(){
+        
     }
+
+    public int getTsaldo() {
+        return tsaldo;
+    }
+
+    public void setTsaldo(int tsaldo) {
+        this.tsaldo = tsaldo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
+    
     
     public static ResultSet getData(){
      try {
@@ -37,34 +52,51 @@ public class DataMahasiswa {
     }
 
     
-    public static void insertData(DataMahasiswa object){
+    public static void insertData(Mahasiswa object){
     try {
         String sql = "INSERT INTO mahasiswa (nim, nama, jenis_kelamin, jurusan, tsaldo, status) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, object.nim);
-        stmt.setString(2, object.nama);
-        stmt.setString(3, object.jenis_kelamin);
-        stmt.setString(4, object.jurusan);
+        stmt.setString(1, object.getNim());
+        stmt.setString(2, object.getNama());
+        stmt.setString(3, object.getJenis_kelamin());
+        stmt.setString(4, object.getJurusan());
         stmt.setInt(5, object.tsaldo);
         stmt.setString(6, object.status);
         stmt.executeUpdate();
-        System.out.println("Sukses insert data");
+        System.out.println("Success insert data");
     } catch (SQLException e) {
         System.out.println("Eror insert data: "+e.getMessage());
     }
     }
     
-    public static void updateData(String selected_nim, DataMahasiswa object){
+    public static ResultSet Data(String selected_nim){
+        try{
+            String sql = "SELECT * FROM mahasiswa WHERE nim = ? ";
+            sql = String.format(sql, selected_nim);
+            ResultSet rs = stmt.executeQuery(sql);
+            if (!rs.next()){
+                System.out.println("data not found");
+                System.exit(0);
+            }else{
+                return rs;
+            }
+        }catch (SQLException e){
+            System.out.println("Ereor : " + e.getMessage());
+        }
+        return null;
+    }
+    
+    public static void updateData(String selected_nim, Mahasiswa object){
     try {
         String sql = "UPDATE mahasiswa SET nim = ?, nama = ?, jenis_kelamin = ?, jurusan = ?, tsaldo = ?, status = ? WHERE nim = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, object.nim);
-        stmt.setString(2, object.nama);
-        stmt.setString(3, object.jenis_kelamin);
-        stmt.setString(4, object.jurusan);
+        stmt.setString(1, object.getNim());
+        stmt.setString(2, object.getNama());
+        stmt.setString(3, object.getJenis_kelamin());
+        stmt.setString(4, object.getJurusan());
         stmt.setInt(5, object.tsaldo);
         stmt.setString(6, object.status);
-        stmt.setString(7, object.nim);
+        stmt.setString(7, object.getNim());
         stmt.executeUpdate();
         System.out.println("Sukses update data");
     } catch (SQLException e) {
@@ -102,36 +134,10 @@ public class DataMahasiswa {
         } catch (Exception e) {
             System.out.println("Erorr"+e.getMessage());
         }
-        
     }
     
-    public static void updateDsaldoMahasiswa(String nim, int tsaldoBaru) {
-    try {
-        String query = "UPDATE Mahasiswa SET tsaldo = tsaldo + ? WHERE nim = ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setInt(1, tsaldoBaru);
-        stmt.setString(2, nim);
-        stmt.executeUpdate();
-        System.out.println("Tsaldo mahasiswa dengan NIM " + nim + " berhasil diupdate menjadi " + tsaldoBaru);
-        } catch (SQLException e) {
-            System.out.println("Gagal mengupdate tsaldo mahasiswa dengan NIM " + nim);
-            e.printStackTrace();
-        }
-    }
     
-    public static void updateWsaldoMahasiswa(String nim, int tsaldoBaru) {
-    try {
-        String query = "UPDATE Mahasiswa SET tsaldo = tsaldo - ? WHERE nim = ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setInt(1, tsaldoBaru);
-        stmt.setString(2, nim);
-        stmt.executeUpdate();
-        System.out.println("Tsaldo mahasiswa dengan NIM " + nim + " berhasil diupdate menjadi " + tsaldoBaru);
-        } catch (SQLException e) {
-            System.out.println("Gagal mengupdate tsaldo mahasiswa dengan NIM " + nim);
-            e.printStackTrace();
-        }
-    }
+    
 
 
     

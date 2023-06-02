@@ -1,6 +1,10 @@
 
 package Transaction;
 
+/**
+ *
+ * @author ridhw
+ */
 import java.sql.Date;
 import java.sql.*;
 import static Connection.Koneksi.*;
@@ -10,11 +14,12 @@ public abstract class Transaksi {
     private String nama;
     private Date date;
     
-    public Transaksi(String pNim,String pNama,Date pDate){
-        this.nim = pNim;
-        this.nama = pNama;
-        this.date = pDate;
-    }
+//    public Transaksi(String pNim,String pNama,Date pDate){
+//        this.nim = pNim;
+//        this.nama = pNama;
+//        this.date = pDate;
+//    }
+    
     
     public abstract void displayTransaksi();
     

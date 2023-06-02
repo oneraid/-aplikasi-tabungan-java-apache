@@ -1,8 +1,9 @@
 
 package AJframe;
 //import Class.Mahasiswa;
-import CollegeStudent.DataMahasiswa;
+import CollegeStudent.Mahasiswa;
 import static Connection.Koneksi.*;
+import CollegeStudent.MahasiswaController;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -10,12 +11,17 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 
-public class JDataMahasiswa extends javax.swing.JFrame {
+public class JMahasiswa extends javax.swing.JFrame {
 
-    public DefaultTableModel model_mahasiswa = new DefaultTableModel();
+    Mahasiswa mahasiswa_model = new Mahasiswa();
+    MahasiswaController mahasiswa_controller = new MahasiswaController(mahasiswa_model , this);
+    public DefaultTableModel table_mahasiswa = new DefaultTableModel();
     public String selected_nim;
+    public String pNim, pNama, pJenisKelamin, pJurusan, pStatus;
+    public int pTSaldo;
     
-    public JDataMahasiswa() {
+    
+    public JMahasiswa() {
         initComponents();
         cekKoneksi();
         initTable();
@@ -24,14 +30,14 @@ public class JDataMahasiswa extends javax.swing.JFrame {
     }
     
     private void initTable() {
-       model_mahasiswa = new DefaultTableModel();
-       tblMhs.setModel(model_mahasiswa);
-       model_mahasiswa.addColumn("NIM");
-       model_mahasiswa.addColumn("Nama");
-       model_mahasiswa.addColumn("Jenis Kelamin");
-       model_mahasiswa.addColumn("Jurusan");
-       model_mahasiswa.addColumn("Total Tabungan");
-       model_mahasiswa.addColumn("Status");
+       table_mahasiswa = new DefaultTableModel();
+       tblMhs.setModel(table_mahasiswa);
+       table_mahasiswa.addColumn("NIM");
+       table_mahasiswa.addColumn("Nama");
+       table_mahasiswa.addColumn("Jenis Kelamin");
+       table_mahasiswa.addColumn("Jurusan");
+       table_mahasiswa.addColumn("Total Tabungan");
+       table_mahasiswa.addColumn("Status");
    }
     
     private void clearData(){
@@ -44,23 +50,9 @@ public class JDataMahasiswa extends javax.swing.JFrame {
     }
     
     public void showData(){
-        model_mahasiswa.getDataVector().removeAllElements();
-        model_mahasiswa.fireTableDataChanged();
-        try {
-        ResultSet result_data = DataMahasiswa.getData();
-        while(result_data.next()){
-        Object[] obj = new Object[6];
-        obj[0] = result_data.getString("nim");
-        obj[1] = result_data.getString("nama");
-        obj[2] = result_data.getString("jenis_kelamin");
-        obj[3] = result_data.getString("jurusan");
-        obj[4] = result_data.getString("tsaldo");
-        obj[5] = result_data.getString("status");
-        model_mahasiswa.addRow(obj);
-        }
-        } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, "Error show data");
-        }
+        table_mahasiswa.getDataVector().removeAllElements();
+        table_mahasiswa.fireTableDataChanged();
+        mahasiswa_controller.show();
     }
     
 
@@ -385,7 +377,7 @@ public class JDataMahasiswa extends javax.swing.JFrame {
         if (ok==0)
         {
             try {
-                DataMahasiswa.deleteData(selected_nim);
+                Mahasiswa.deleteData(selected_nim);
                 JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Data gagal dihapus!");
@@ -403,14 +395,13 @@ public class JDataMahasiswa extends javax.swing.JFrame {
         if (ok==0)
         {
             try{
-                String input_nim = txtNIM.getText();
-                String input_nama = txtNama.getText();
-                String input_jenis_kelamin = (Lk.isSelected() ? "Laki-laki" : "Perempuan");
-                String input_jurusan = (String) cJurusan.getSelectedItem();
-                int input_tSaldo = Integer.valueOf(Txtsaldo1.getText());
-                String input_status = (String) cStatus.getSelectedItem();
-                DataMahasiswa mhs = new DataMahasiswa(input_nim, input_nama, input_jenis_kelamin, input_jurusan, input_tSaldo,input_status);
-                DataMahasiswa.updateData(selected_nim, mhs);
+                pNim = txtNIM.getText();
+                pNama = txtNama.getText();
+                pJenisKelamin = (Lk.isSelected() ? "Laki-laki" : "Perempuan");
+                pJurusan = (String) cJurusan.getSelectedItem();
+                pTSaldo = Integer.valueOf(Txtsaldo1.getText());
+                pStatus = (String) cStatus.getSelectedItem();
+                mahasiswa_controller.update();
                 JOptionPane.showMessageDialog(this, "Data berhasil diupdate!");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Data gagal DiUpdate!");
@@ -428,18 +419,17 @@ public class JDataMahasiswa extends javax.swing.JFrame {
     private void sumbitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sumbitBtnActionPerformed
         if(txtNIM.getText().isEmpty() || txtNama.getText().isEmpty() )
         {
-            JOptionPane.showMessageDialog(this, "GAGAL, ada Kolom yang kosong!");
+            JOptionPane.showMessageDialog(this, "error empty column!");
         }else{
             try{
                 Txtsaldo1.setText("0");
-                String input_nim = txtNIM.getText();
-                String input_nama = txtNama.getText();
-                String input_jenis_kelamin = (Lk.isSelected() ? "Laki-laki" : "Perempuan");
-                String input_jurusan = (String) cJurusan.getSelectedItem();
-                int input_saldo1 = Integer.valueOf(Txtsaldo1.getText());
-                String input_status = (String) cStatus.getSelectedItem();
-                DataMahasiswa mhs = new DataMahasiswa(input_nim, input_nama, input_jenis_kelamin, input_jurusan,input_saldo1, input_status);
-                DataMahasiswa.insertData(mhs);
+                pNim = txtNIM.getText();
+                pNama = txtNama.getText();
+                pJenisKelamin = (Lk.isSelected() ? "Laki-laki" : "Perempuan");
+                pJurusan = (String) cJurusan.getSelectedItem();
+                pTSaldo = Integer.valueOf(Txtsaldo1.getText());
+                pStatus = (String) cStatus.getSelectedItem();
+                mahasiswa_controller.insert();
                 JOptionPane.showMessageDialog(this, "Sukses ditambah");
             } catch (Exception e){
                 JOptionPane.showMessageDialog(this, e);
@@ -477,14 +467,22 @@ public class JDataMahasiswa extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JDataMahasiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JMahasiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JDataMahasiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JMahasiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JDataMahasiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JMahasiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JDataMahasiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JMahasiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -497,7 +495,7 @@ public class JDataMahasiswa extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JDataMahasiswa().setVisible(true);
+                new JMahasiswa().setVisible(true);
             }
         });
     }
