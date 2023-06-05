@@ -1,6 +1,9 @@
 
 package CollegeStudent;
 
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
 /**
  *
  * @author ridhw
@@ -48,7 +51,8 @@ public abstract class Student {
     }
 
     
-    
-    
-    
+    public abstract void insertData(Mahasiswa object);
+    public abstract void updateData(String selected_nim, Mahasiswa object);
+    public abstract void deleteData(String selected_nim);
+ 
 }

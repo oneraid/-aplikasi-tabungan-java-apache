@@ -11,7 +11,8 @@ import java.sql.*;
 public class MahasiswaController {
     private Mahasiswa model;
     private JMahasiswa view;
-    private String selected_nim;
+    private String selected;
+    Mahasiswa mahasiswa = new Mahasiswa();
 
     public MahasiswaController(Mahasiswa model, JMahasiswa view) {
         this.model = model;
@@ -45,12 +46,12 @@ public class MahasiswaController {
         model.setJurusan(view.pJurusan);
         model.setTsaldo(view.pTSaldo);
         model.setStatus(view.pStatus);
-        Mahasiswa.insertData(model);
+        mahasiswa.insertData(model);
     }
     
     public void update(){
-        selected_nim = view.selected_nim;
-        Mahasiswa.Data(selected_nim);
+        selected = view.selected_nim;
+        Mahasiswa.Data(selected);
         
         model.setNim(view.pNim);
         model.setNama(view.pNama);
@@ -58,18 +59,14 @@ public class MahasiswaController {
         model.setJurusan(view.pJurusan);
         model.setTsaldo(view.pTSaldo);
         model.setStatus(view.pStatus);
-        Mahasiswa.updateData(selected_nim,model);
+        mahasiswa.updateData(selected,model);
     }
     
     public void delete(){
-        selected_nim = view.selected_nim;
-        Mahasiswa.Data(selected_nim);
-        Mahasiswa.deleteData(selected_nim);
+        selected = view.selected_nim;
+        Mahasiswa.Data(selected);
+        mahasiswa.deleteData(selected);
     }
     
-    public void updatesaldo(){
-        
-        model.setNim(selected_nim);
-    }
     
 }

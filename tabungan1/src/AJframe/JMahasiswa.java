@@ -337,22 +337,28 @@ public class JMahasiswa extends javax.swing.JFrame {
         
         Txtsaldo1.setEditable(false);
         Txtsaldo1.setEnabled(false);
+        EditBtn.setEnabled(false);
+        DeleteBtn.setEnabled(false);
     }//GEN-LAST:event_formComponentShown
 
     private void tblMhsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMhsMouseClicked
 //        txtNIM.setEditable(false);
         txtNIM.setEnabled(false);
         sumbitBtn.setEnabled(false);
+        EditBtn.setEnabled(true);
+        DeleteBtn.setEnabled(true);
+        
+        
         int row = tblMhs.getSelectedRow();
-        String obj_nim = tblMhs.getValueAt(row, 0).toString();
-        String obj_nama = tblMhs.getValueAt(row, 1).toString();
-        String obj_jenis_kelamin = tblMhs.getValueAt(row, 2).toString();
-        String obj_jurusan = tblMhs.getValueAt(row, 3).toString();
-        selected_nim = obj_nim;
-        txtNIM.setText(obj_nim);
-        txtNama.setText(obj_nama);
-        cJurusan.setSelectedItem(obj_jurusan);
-        if(obj_jenis_kelamin.equals("Laki-laki")){
+        pNim = tblMhs.getValueAt(row, 0).toString();
+        pNama = tblMhs.getValueAt(row, 1).toString();
+        pJenisKelamin = tblMhs.getValueAt(row, 2).toString();
+        pJurusan = tblMhs.getValueAt(row, 3).toString();
+        selected_nim = pNim;
+        txtNIM.setText(pNim);
+        txtNama.setText(pNama);
+        cJurusan.setSelectedItem(pJurusan);
+        if(pJenisKelamin.equals("Laki-laki")){
             Lk.setSelected(true);
             Pr.setSelected(false);
         } else {
@@ -377,13 +383,17 @@ public class JMahasiswa extends javax.swing.JFrame {
         if (ok==0)
         {
             try {
-                Mahasiswa.deleteData(selected_nim);
+                mahasiswa_controller.delete();
                 JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Data gagal dihapus!");
             }
         }
         showData();
+        sumbitBtn.setEnabled(true);
+        txtNIM.setEnabled(true);
+        EditBtn.setEnabled(false);
+        DeleteBtn.setEnabled(false);
         clearData();
 
     }//GEN-LAST:event_DeleteBtnActionPerformed
@@ -401,13 +411,19 @@ public class JMahasiswa extends javax.swing.JFrame {
                 pJurusan = (String) cJurusan.getSelectedItem();
                 pTSaldo = Integer.valueOf(Txtsaldo1.getText());
                 pStatus = (String) cStatus.getSelectedItem();
+                
                 mahasiswa_controller.update();
+                
                 JOptionPane.showMessageDialog(this, "Data berhasil diupdate!");
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Data gagal DiUpdate!");
+                JOptionPane.showMessageDialog(this, "Data gagal DiUpdate!" );
             }
         }
         showData();
+        sumbitBtn.setEnabled(true);
+        txtNIM.setEnabled(true);
+        EditBtn.setEnabled(false);
+        DeleteBtn.setEnabled(false);
         clearData();
     }//GEN-LAST:event_EditBtnActionPerformed
 
@@ -429,7 +445,9 @@ public class JMahasiswa extends javax.swing.JFrame {
                 pJurusan = (String) cJurusan.getSelectedItem();
                 pTSaldo = Integer.valueOf(Txtsaldo1.getText());
                 pStatus = (String) cStatus.getSelectedItem();
+                
                 mahasiswa_controller.insert();
+                
                 JOptionPane.showMessageDialog(this, "Sukses ditambah");
             } catch (Exception e){
                 JOptionPane.showMessageDialog(this, e);
@@ -447,6 +465,8 @@ public class JMahasiswa extends javax.swing.JFrame {
     private void ClearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearBtnActionPerformed
         sumbitBtn.setEnabled(true);
         txtNIM.setEnabled(true);
+        EditBtn.setEnabled(false);
+        DeleteBtn.setEnabled(false);
         clearData();  
     }//GEN-LAST:event_ClearBtnActionPerformed
 

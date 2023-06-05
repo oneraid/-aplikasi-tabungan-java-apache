@@ -316,7 +316,7 @@ public class JDeposit extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Masukkan Nim atau Jumlah");
         }else{
                 try {
-                deposit_controller.idtr(idsetorLbl);
+                deposit_controller.code(idsetorLbl);
                 pIdsetor = idsetorLbl.getText();
                 
                 pNim = txtNIM.getText();
@@ -344,7 +344,7 @@ public class JDeposit extends javax.swing.JFrame {
 
         try {
             
-            Mahasiswa.tampildata(txtNIM, Namelb, Jurusanlb, JeniskelLb, saldo);
+            deposit_controller.dataview(txtNIM, Namelb, Jurusanlb, JeniskelLb, saldo);
         } catch (Exception e) {
         }
     }//GEN-LAST:event_CheckBtnActionPerformed

@@ -4,6 +4,7 @@ package Transaction;
 import AJframe.JDeposit;
 import java.sql.*;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -12,6 +13,7 @@ import javax.swing.JLabel;
 public class DepositController {
     private Deposit model;
     private JDeposit view;
+    Deposit deposit = new Deposit();
 
     public DepositController(Deposit model, JDeposit view) {
         this.model = model;
@@ -40,19 +42,22 @@ public class DepositController {
         model.setNama(view.pNama);
         model.setDate(view.pDate);
         model.setDsaldo(view.pDsaldo);
-        Deposit.InsertDeposit(model);
+        Deposit.InsertData(model);
     }
         
     public Deposit getModel() {
     return model;
     }
     
-    public void idtr(JLabel kodeTransaksi){
-        Deposit.kodesetor(kodeTransaksi);
+    public void code(JLabel kodeTransaksi){
+        deposit.codetx(kodeTransaksi);
     }
     
     public void updatesaldo(String nim,int tsaldoBaru){
-        model.updateDsaldoMahasiswa(nim, tsaldoBaru);
+        model.updatesaldo(nim, tsaldoBaru);
     }
     
+    public void dataview ( JTextField textFieldNim, JLabel labelNama, JLabel labelJurusan, JLabel labelJeniskelamin, JLabel saldo){
+        model.tampildata(textFieldNim, labelNama, labelJurusan, labelJeniskelamin, saldo);
+    }
 }

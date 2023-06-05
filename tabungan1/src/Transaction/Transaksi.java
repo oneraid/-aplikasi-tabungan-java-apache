@@ -8,6 +8,8 @@ package Transaction;
 import java.sql.Date;
 import java.sql.*;
 import static Connection.Koneksi.*;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public abstract class Transaksi {
     private String nim;
@@ -20,8 +22,6 @@ public abstract class Transaksi {
 //        this.date = pDate;
 //    }
     
-    
-    public abstract void displayTransaksi();
     
     public String getNim() {
         return nim;
@@ -46,5 +46,9 @@ public abstract class Transaksi {
     public void setDate(Date date) {
         this.date = date;
     } 
+    
+    public abstract void codetx(JLabel kodeTransaksi);
+    public abstract void tampildata( JTextField textFieldNim, JLabel labelNama, JLabel labelJurusan, JLabel labelJeniskelamin, JLabel saldo);
+    public abstract void updatesaldo(String nim, int tsaldoBaru);
             
 }

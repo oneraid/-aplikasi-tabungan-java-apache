@@ -7,6 +7,8 @@ import java.sql.*;
 import static Connection.Koneksi.*;
 import java.sql.PreparedStatement;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 
 public class Withdraw extends Transaksi{
@@ -45,7 +47,8 @@ public class Withdraw extends Transaksi{
      return null;
     }
     
-    public static void InsertWithdraw( Withdraw object){
+    
+    public static void InsertData( Withdraw object){
     try {
         String sql = "INSERT INTO t_tarik (id_tarik, nim, nama, tanggal, wsaldo) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -61,7 +64,8 @@ public class Withdraw extends Transaksi{
     }
     }
     
-    public static void kodetarik(JLabel txkodetransaksi){
+    @Override
+    public void codetx(JLabel txkodetransaksi){
         try {
             String sql = "SELECT RIGHT(id_tarik, 2) + 1 AS next_id FROM t_tarik ORDER BY id_tarik DESC LIMIT 1";
         ResultSet rs = stmt.executeQuery(sql);
@@ -80,7 +84,30 @@ public class Withdraw extends Transaksi{
         }
     }
     
-    public static void updateWsaldoMahasiswa(String nim, int tsaldoBaru) {
+    
+    @Override
+    public void tampildata( JTextField textFieldNim, JLabel labelNama, JLabel labelJurusan, JLabel labelJeniskelamin, JLabel saldo){
+        try {
+            String query = "SELECT nama, jurusan, jenis_kelamin, tsaldo FROM mahasiswa WHERE nim = ?";
+            pst = conn.prepareStatement(query);
+            pst.setString(1, textFieldNim.getText());
+            rst = pst.executeQuery();
+            if (rst.next()) {
+            labelNama.setText(rst.getString("nama"));
+            labelJurusan.setText(rst.getString("jurusan"));
+            labelJeniskelamin.setText(rst.getString("jenis_kelamin"));
+            saldo.setText(rst.getString("tsaldo"));
+            } else {
+            JOptionPane.showMessageDialog(null, "Data Tidak Ditemukan ! ", "Message", JOptionPane.ERROR_MESSAGE);
+            }
+            System.out.println("Sukses menampilkan data");
+        } catch (Exception e) {
+            System.out.println("Erorr"+e.getMessage());
+        }
+    }
+    
+    @Override
+    public void updatesaldo(String nim, int tsaldoBaru) {
     try {
         String query = "UPDATE Mahasiswa SET tsaldo = tsaldo - ? WHERE nim = ?";
         PreparedStatement stmt = conn.prepareStatement(query);
@@ -94,14 +121,6 @@ public class Withdraw extends Transaksi{
         }
     }
     
-    @Override
-    public void displayTransaksi() {
-        System.out.println("Detail transaksi:");
-        System.out.println("ID Setor: " + id_tarik);
-        System.out.println("NIM: " + getNim());
-        System.out.println("Nama: " + getNama());
-        System.out.println("Tanggal: " + getDate());
-        System.out.println("Dsaldo: " + wsaldo);
-    }
+    
     
 }

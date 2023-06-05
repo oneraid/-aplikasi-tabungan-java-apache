@@ -4,6 +4,7 @@ package Transaction;
 import AJframe.Jwithdraw;
 import java.sql.*;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -12,6 +13,7 @@ import javax.swing.JLabel;
 public class WithdrawController {
     private Withdraw model;
     private AJframe.Jwithdraw view;
+    Withdraw withdraw = new Withdraw();
 
     public WithdrawController(Withdraw model, Jwithdraw view) {
         this.model = model;
@@ -40,7 +42,7 @@ public class WithdrawController {
         model.setNama(view.pNama);
         model.setDate(view.pDate);
         model.setWsaldo(view.pWSaldo);
-        Withdraw.InsertWithdraw(model);
+        Withdraw.InsertData(model);
     }
         
     public Withdraw getModel() {
@@ -48,13 +50,15 @@ public class WithdrawController {
     }
     
     public void idtr(JLabel kodeTransaksi){
-        Withdraw.kodetarik(kodeTransaksi);
+        withdraw.codetx(kodeTransaksi);
     }
     
     public void updatesaldo(String nim,int wsaldoBaru){
-        model.updateWsaldoMahasiswa(nim, wsaldoBaru);
+        model.updatesaldo(nim, wsaldoBaru);
     }
     
-    
+    public void dataview ( JTextField textFieldNim, JLabel labelNama, JLabel labelJurusan, JLabel labelJeniskelamin, JLabel saldo){
+        model.tampildata(textFieldNim, labelNama, labelJurusan, labelJeniskelamin, saldo);
+    }
     
 }

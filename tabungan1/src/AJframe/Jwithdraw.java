@@ -320,6 +320,7 @@ public class Jwithdraw extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void CheckBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CheckBtnMouseClicked
@@ -330,7 +331,7 @@ public class Jwithdraw extends javax.swing.JFrame {
 
         try {
 
-            Mahasiswa.tampildata(txtNIM, Namelb, Jurusanlb, JeniskelLb, saldo);
+            withdraw_controller.dataview(txtNIM, Namelb, Jurusanlb, JeniskelLb, saldo);
         } catch (Exception e) {
         }
     }//GEN-LAST:event_CheckBtnActionPerformed
