@@ -6,9 +6,7 @@ package AJframe;
 import Transaction.DepositController;
 import static Connection.Koneksi.*;
 import Transaction.Deposit;
-import CollegeStudent.Mahasiswa;
 import java.sql.*;
-import java.text.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -17,13 +15,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JDeposit extends javax.swing.JFrame {
 
-    Deposit deposit_model = new Deposit();
-    DepositController deposit_controller = new DepositController(deposit_model, this);
-    public DefaultTableModel table_deposit = new DefaultTableModel();
     public String pIdsetor, pNim, pNama;
     public Date pDate;
     public int pDsaldo;
-    public String kodeTransaksi;
+    
+    Deposit deposit_model = new Deposit(pIdsetor, pNim, pNama, pDate, pDsaldo);
+    DepositController deposit_controller = new DepositController(deposit_model, this);
+    public DefaultTableModel table_deposit = new DefaultTableModel();
             
     public JDeposit() {
         initComponents();
@@ -116,9 +114,9 @@ public class JDeposit extends javax.swing.JFrame {
         });
 
         DepositBtn.setText("DEPOSIT");
-        DepositBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                DepositBtnMouseClicked(evt);
+        DepositBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DepositBtnActionPerformed(evt);
             }
         });
 
@@ -138,6 +136,12 @@ public class JDeposit extends javax.swing.JFrame {
         saldo.setForeground(new java.awt.Color(51, 51, 255));
         saldo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         saldo.setText("-");
+
+        txAmount.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txAmountKeyTyped(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Rp");
@@ -242,7 +246,7 @@ public class JDeposit extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblst);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("DATA SETORAN");
+        jLabel3.setText("DATA DEPOSIT");
 
         kembaliBtn.setText("<<Kembali");
         kembaliBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -309,37 +313,6 @@ public class JDeposit extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void DepositBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DepositBtnMouseClicked
-
-        if (txtNIM.getText().isEmpty() || txAmount.getText().isEmpty())
-        {
-            JOptionPane.showMessageDialog(this, "Masukkan Nim atau Jumlah");
-        }else{
-                try {
-                deposit_controller.code(idsetorLbl);
-                pIdsetor = idsetorLbl.getText();
-                
-                pNim = txtNIM.getText();
-                pNama = Namelb.getText();
-                pDsaldo = Integer.parseInt(txAmount.getText());
-
-                java.util.Date date = new java.util.Date();
-                pDate = new java.sql.Date(date.getTime());
-                
-                deposit_controller.insert();
-                deposit_controller.updatesaldo(pNim, pDsaldo);
-                
-                JOptionPane.showMessageDialog(this, "Sukses ditambah");
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e);
-            }
-        }
-        
-        showData();
-        clearData();
-        DepositBtn.setEnabled(false);
-    }//GEN-LAST:event_DepositBtnMouseClicked
-
     private void CheckBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckBtnActionPerformed
 
         try {
@@ -375,6 +348,43 @@ public class JDeposit extends javax.swing.JFrame {
     private void CheckBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CheckBtnMouseClicked
         DepositBtn.setEnabled(true);
     }//GEN-LAST:event_CheckBtnMouseClicked
+
+    private void txAmountKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txAmountKeyTyped
+        char c = evt.getKeyChar();
+        if(!Character.isDigit(c)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txAmountKeyTyped
+
+    private void DepositBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DepositBtnActionPerformed
+        if (txtNIM.getText().isEmpty() || txAmount.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Masukkan Nim atau Jumlah");
+        }else{
+                try {
+                deposit_controller.code(idsetorLbl);
+                pIdsetor = idsetorLbl.getText();
+                
+                pNim = txtNIM.getText();
+                pNama = Namelb.getText();
+                pDsaldo = Integer.parseInt(txAmount.getText());
+
+                java.util.Date date = new java.util.Date();
+                pDate = new java.sql.Date(date.getTime());
+                
+                deposit_controller.insert();
+                deposit_controller.updatesaldo(pNim, pDsaldo);
+                
+                JOptionPane.showMessageDialog(this, "Sukses ditambah");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e);
+            }
+        }
+        
+        showData();
+        clearData();
+        DepositBtn.setEnabled(false);
+    }//GEN-LAST:event_DepositBtnActionPerformed
 
     
     /**

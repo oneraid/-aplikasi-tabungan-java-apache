@@ -168,7 +168,7 @@
             <Property name="text" type="java.lang.String" value="DEPOSIT"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="DepositBtnMouseClicked"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DepositBtnActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="Namelb">
@@ -211,6 +211,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txAmount">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txAmountKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
@@ -345,7 +348,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="18" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="DATA SETORAN"/>
+            <Property name="text" type="java.lang.String" value="DATA DEPOSIT"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="kembaliBtn">

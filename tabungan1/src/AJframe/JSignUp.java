@@ -67,6 +67,11 @@ public class JSignUp extends javax.swing.JFrame {
                 SignUpBtnMouseEntered(evt);
             }
         });
+        SignUpBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SignUpBtnActionPerformed(evt);
+            }
+        });
 
         jLabel10.setForeground(new java.awt.Color(255, 0, 0));
         jLabel10.setText("Login");
@@ -184,12 +189,15 @@ public class JSignUp extends javax.swing.JFrame {
             SignUp sg = new SignUp(nama, username, password);
             SignUp.DaftarAcc(sg);
             Clear();
+            
             JOptionPane.showMessageDialog(this, "Registrasi Sukses");
   
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e);
             }
         }
+        new JLogin().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_SignUpBtnMouseClicked
 
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
@@ -200,6 +208,10 @@ public class JSignUp extends javax.swing.JFrame {
     private void SignUpBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SignUpBtnMouseEntered
         // TODO add your handling code here:
     }//GEN-LAST:event_SignUpBtnMouseEntered
+
+    private void SignUpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignUpBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SignUpBtnActionPerformed
 
     /**
      * @param args the command line arguments

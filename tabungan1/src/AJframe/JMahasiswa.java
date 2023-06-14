@@ -1,6 +1,5 @@
 
 package AJframe;
-//import Class.Mahasiswa;
 import CollegeStudent.Mahasiswa;
 import static Connection.Koneksi.*;
 import CollegeStudent.MahasiswaController;
@@ -13,12 +12,14 @@ import javax.swing.table.DefaultTableModel;
 
 public class JMahasiswa extends javax.swing.JFrame {
 
-    Mahasiswa mahasiswa_model = new Mahasiswa();
-    MahasiswaController mahasiswa_controller = new MahasiswaController(mahasiswa_model , this);
-    public DefaultTableModel table_mahasiswa = new DefaultTableModel();
+    
     public String selected_nim;
     public String pNim, pNama, pJenisKelamin, pJurusan, pStatus;
     public int pTSaldo;
+    
+    Mahasiswa mahasiswa_model = new Mahasiswa(pNim, pNama, pJenisKelamin, pJurusan, pTSaldo, pStatus);
+    MahasiswaController mahasiswa_controller = new MahasiswaController(mahasiswa_model , this);
+    public DefaultTableModel table_mahasiswa = new DefaultTableModel();
     
     
     public JMahasiswa() {

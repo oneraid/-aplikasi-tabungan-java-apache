@@ -13,7 +13,10 @@ import javax.swing.JTextField;
 public class WithdrawController {
     private Withdraw model;
     private AJframe.Jwithdraw view;
-    Withdraw withdraw = new Withdraw();
+    String pIdtarik, pNim, pNama; 
+    int pWsaldo;
+    Date pDate;
+    Withdraw withdraw = new Withdraw(pIdtarik, pNim, pNama, pDate, pWsaldo);
 
     public WithdrawController(Withdraw model, Jwithdraw view) {
         this.model = model;
@@ -22,10 +25,10 @@ public class WithdrawController {
     
     public void show(){
          try {
-            ResultSet result_data = Deposit.getData();
+            ResultSet result_data = withdraw.getData();
             while (result_data.next()){
                 Object[] obj = new Object[5];
-                obj[0] = result_data.getString("id_setor");
+                obj[0] = result_data.getString("id_tarik");
                 obj[1] = result_data.getString("nim");
                 obj[2] = result_data.getString("nama");
                 obj[3] = result_data.getString("tanggal");
@@ -37,11 +40,11 @@ public class WithdrawController {
     }
     
     public void insert(){
-        model.setId_tarik(view.pIdTarik);
+        model.setId_tarik(view.pIdtarik);
         model.setNim(view.pNim);
         model.setNama(view.pNama);
         model.setDate(view.pDate);
-        model.setWsaldo(view.pWSaldo);
+        model.setWsaldo(view.pWsaldo);
         Withdraw.InsertData(model);
     }
         
@@ -49,7 +52,7 @@ public class WithdrawController {
     return model;
     }
     
-    public void idtr(JLabel kodeTransaksi){
+    public void code(JLabel kodeTransaksi){
         withdraw.codetx(kodeTransaksi);
     }
     

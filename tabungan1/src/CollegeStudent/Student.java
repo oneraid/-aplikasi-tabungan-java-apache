@@ -1,6 +1,7 @@
 
 package CollegeStudent;
 
+import java.sql.ResultSet;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -13,10 +14,15 @@ public abstract class Student {
     private String nama;
     private String jenis_kelamin;
     private String jurusan;
-    
-    public Student (){
 
+    public Student(String nim, String nama, String jenis_kelamin, String jurusan) {
+        this.nim = nim;
+        this.nama = nama;
+        this.jenis_kelamin = jenis_kelamin;
+        this.jurusan = jurusan;
     }
+    
+    
 
     public String getNim() {
         return nim;
@@ -51,6 +57,8 @@ public abstract class Student {
     }
 
     
+    public abstract ResultSet getData();
+    public abstract ResultSet Data(String selected_nim);
     public abstract void insertData(Mahasiswa object);
     public abstract void updateData(String selected_nim, Mahasiswa object);
     public abstract void deleteData(String selected_nim);

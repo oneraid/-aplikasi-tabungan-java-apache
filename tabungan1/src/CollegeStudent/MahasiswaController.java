@@ -12,7 +12,10 @@ public class MahasiswaController {
     private Mahasiswa model;
     private JMahasiswa view;
     private String selected;
-    Mahasiswa mahasiswa = new Mahasiswa();
+    String pNim, pNama, pJenisKelamin, pJurusan, pStatus;
+    int pTSaldo;
+    
+    Mahasiswa mahasiswa = new Mahasiswa(pNim, pNama, pJenisKelamin, pJurusan, pTSaldo, pStatus);
 
     public MahasiswaController(Mahasiswa model, JMahasiswa view) {
         this.model = model;
@@ -22,7 +25,7 @@ public class MahasiswaController {
     
     public void show(){
         try {
-            ResultSet result_data = Mahasiswa.getData();
+            ResultSet result_data = mahasiswa.getData();
             while (result_data.next()){
                 Object[] obj = new Object[6];
                 obj[0] = result_data.getString("nim");
@@ -51,7 +54,7 @@ public class MahasiswaController {
     
     public void update(){
         selected = view.selected_nim;
-        Mahasiswa.Data(selected);
+        mahasiswa.Data(selected);
         
         model.setNim(view.pNim);
         model.setNama(view.pNama);
@@ -64,7 +67,7 @@ public class MahasiswaController {
     
     public void delete(){
         selected = view.selected_nim;
-        Mahasiswa.Data(selected);
+        mahasiswa.Data(selected);
         mahasiswa.deleteData(selected);
     }
     

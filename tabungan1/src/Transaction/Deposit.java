@@ -15,15 +15,12 @@ public class Deposit extends Transaksi{
     String id_setor;
     int dsaldo;
     
-//    public Deposit (String pIdsetor, String pNim, String pNama, Date pDate, int pDsaldo){
-//        super(pNim, pNama, pDate);
-//        this.id_setor = pIdsetor;
-//        this.dsaldo = pDsaldo;
-//    } 
+    public Deposit (String pIdsetor, String pNim, String pNama, Date pDate, int pDsaldo){
+        super(pNim, pNama, pDate);
+        this.id_setor = pIdsetor;
+        this.dsaldo = pDsaldo;
+    } 
 
-    public Deposit() {
-        cekKoneksi();
-    }
 
     public String getId_setor() {
         return id_setor;
@@ -43,7 +40,7 @@ public class Deposit extends Transaksi{
     
     
 
-    public static ResultSet getData() {
+    public ResultSet getData(){
         try {
             String sql = "SELECT * FROM t_setor";
             ResultSet rs = stmt.executeQuery(sql);

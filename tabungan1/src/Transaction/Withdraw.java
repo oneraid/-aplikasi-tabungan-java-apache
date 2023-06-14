@@ -14,9 +14,13 @@ import javax.swing.JTextField;
 public class Withdraw extends Transaksi{
     String id_tarik;
     int wsaldo;
-    
-    public Withdraw(){
+
+    public Withdraw(String pIdtarik, String pNim, String pNama, Date pDate, int pWsaldo) {
+        super(pNim, pNama, pDate);
+        this.id_tarik = pIdtarik;
+        this.wsaldo = pWsaldo;
     }
+    
 
     public String getId_tarik() {
         return id_tarik;
@@ -35,16 +39,15 @@ public class Withdraw extends Transaksi{
     }
     
     
-    
-    public static ResultSet getData(){
-     try {
-       String sql = "SELECT * FROM t_tarik";
-       ResultSet rs = stmt.executeQuery(sql);
-       return rs;
-     } catch (SQLException e) {
-       System.out.println("Gagal get data: "+e.getMessage());
-     }
-     return null;
+    public ResultSet getData(){
+        try {
+            String sql = "SELECT * FROM t_tarik";
+            ResultSet rs = stmt.executeQuery(sql);
+            return rs;
+        } catch (SQLException e) {
+            System.out.println("Gagal get data: "+e.getMessage());
+        }
+        return null;
     }
     
     
@@ -65,7 +68,7 @@ public class Withdraw extends Transaksi{
     }
     
     @Override
-    public void codetx(JLabel txkodetransaksi){
+    public void codetx(JLabel kodeTransaksi){
         try {
             String sql = "SELECT RIGHT(id_tarik, 2) + 1 AS next_id FROM t_tarik ORDER BY id_tarik DESC LIMIT 1";
         ResultSet rs = stmt.executeQuery(sql);
@@ -73,9 +76,9 @@ public class Withdraw extends Transaksi{
         if (rs.next()) {
             int nextId = rs.getInt("next_id");
             String no = String.format("%03d", nextId);
-            txkodetransaksi.setText("WT" + no);
+            kodeTransaksi.setText("WT" + no);
         } else {
-            txkodetransaksi.setText("WT001");
+            kodeTransaksi.setText("WT001");
         }
         
         } catch (Exception e) 

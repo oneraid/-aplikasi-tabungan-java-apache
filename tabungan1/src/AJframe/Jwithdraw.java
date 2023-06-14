@@ -4,25 +4,22 @@
  */
 package AJframe;
 import static Connection.Koneksi.*;
-import Transaction.Deposit;
-import CollegeStudent.Mahasiswa;
 import Transaction.Withdraw;
 import Transaction.WithdrawController;
 import java.sql.*;
-import java.text.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 
 public class Jwithdraw extends javax.swing.JFrame {
-
-    Withdraw withdraw_model = new Withdraw();
+    
+    public String pIdtarik, pNim, pNama;
+    public Date pDate;
+    public int pWsaldo;
+    
+    Withdraw withdraw_model = new Withdraw(pIdtarik, pNim, pNama, pDate, pWsaldo);
     WithdrawController withdraw_controller = new WithdrawController(withdraw_model, this);
     public DefaultTableModel table_withdraw = new DefaultTableModel();
-    
-    public String pIdTarik, pNim, pNama;
-    public Date pDate;
-    public int pWSaldo;
 
     
     public Jwithdraw() {
@@ -39,7 +36,7 @@ public class Jwithdraw extends javax.swing.JFrame {
     
     private void initTable() {
        table_withdraw = new DefaultTableModel();
-       tblst.setModel(table_withdraw);
+       tbltr.setModel(table_withdraw);
        table_withdraw.addColumn("ID Tarik");
        table_withdraw.addColumn("NIM");
        table_withdraw.addColumn("Nama");
@@ -61,20 +58,7 @@ public class Jwithdraw extends javax.swing.JFrame {
     public void showData(){
         table_withdraw.getDataVector().removeAllElements();
         table_withdraw.fireTableDataChanged();
-        try {
-        ResultSet result_data = Withdraw.getData();
-        while(result_data.next()){
-        Object[] obj = new Object[5];
-        obj[0] = result_data.getString("id_tarik");
-        obj[1] = result_data.getString("nim");
-        obj[2] = result_data.getString("nama");
-        obj[3] = result_data.getString("tanggal");
-        obj[4] = result_data.getString("wsaldo");
-        table_withdraw.addRow(obj);
-        }
-        } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, "Error show data"+ e.getMessage());
-        }
+        withdraw_controller.show();
     }
     
     
@@ -88,7 +72,7 @@ public class Jwithdraw extends javax.swing.JFrame {
         txtNIM = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         CheckBtn = new javax.swing.JButton();
-        DepositBtn = new javax.swing.JButton();
+        DepositWith = new javax.swing.JButton();
         Namelb = new javax.swing.JLabel();
         JeniskelLb = new javax.swing.JLabel();
         Jurusanlb = new javax.swing.JLabel();
@@ -99,11 +83,16 @@ public class Jwithdraw extends javax.swing.JFrame {
         idsetorLbl = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblst = new javax.swing.JTable();
+        tbltr = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         kembaliBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("NIM");
@@ -123,10 +112,10 @@ public class Jwithdraw extends javax.swing.JFrame {
             }
         });
 
-        DepositBtn.setText("WITHDRAW");
-        DepositBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                DepositBtnMouseClicked(evt);
+        DepositWith.setText("WITHDRAW");
+        DepositWith.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DepositWithActionPerformed(evt);
             }
         });
 
@@ -186,7 +175,7 @@ public class Jwithdraw extends javax.swing.JFrame {
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(DepositBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
+                                    .addComponent(DepositWith, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
                                     .addComponent(txAmount)
                                     .addComponent(idsetorLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
@@ -226,13 +215,13 @@ public class Jwithdraw extends javax.swing.JFrame {
                     .addComponent(txAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addGap(28, 28, 28)
-                .addComponent(DepositBtn)
+                .addComponent(DepositWith)
                 .addGap(18, 18, 18)
                 .addComponent(idsetorLbl)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tblst.setModel(new javax.swing.table.DefaultTableModel(
+        tbltr.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -248,15 +237,15 @@ public class Jwithdraw extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblst.addMouseListener(new java.awt.event.MouseAdapter() {
+        tbltr.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblstMouseClicked(evt);
+                tbltrMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblst);
+        jScrollPane1.setViewportView(tbltr);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("DATA SETORAN");
+        jLabel3.setText("DATA WITHDRAW");
 
         kembaliBtn.setText("<<Kembali");
         kembaliBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -324,7 +313,7 @@ public class Jwithdraw extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CheckBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CheckBtnMouseClicked
-        DepositBtn.setEnabled(true);
+        DepositWith.setEnabled(true);
     }//GEN-LAST:event_CheckBtnMouseClicked
 
     private void CheckBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckBtnActionPerformed
@@ -336,48 +325,13 @@ public class Jwithdraw extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_CheckBtnActionPerformed
 
-    private void DepositBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DepositBtnMouseClicked
+    private void tbltrMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbltrMouseClicked
 
-        if (txtNIM.getText().isEmpty() || txAmount.getText().isEmpty()  )
-        {
-            JOptionPane.showMessageDialog(this, "Masukkan Nim atau Jumlah");
-        } else if(Integer.parseInt(saldo.getText()) < Integer.parseInt(txAmount.getText()))
-        {
-            JOptionPane.showMessageDialog(this, "Saldo Tidak Cukup !!");
-        }
-        else{
-            try {
-                withdraw_controller.idtr(idsetorLbl);
-                pIdTarik = idsetorLbl.getText();
-
-                pNim = txtNIM.getText();
-                pNama = Namelb.getText();
-                pWSaldo = Integer.parseInt(txAmount.getText());
-
-                java.util.Date date = new java.util.Date();
-                pDate = new java.sql.Date(date.getTime());
-
-                withdraw_controller.insert();
-                withdraw_controller.updatesaldo(pNim, pWSaldo);
-                
-                JOptionPane.showMessageDialog(this, "Sukses ditambah");
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e);
-            }
-        }
-
-        showData();
-        clearData();
-        DepositBtn.setEnabled(false);
-    }//GEN-LAST:event_DepositBtnMouseClicked
-
-    private void tblstMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblstMouseClicked
-
-        boolean a=tblst.isEditing();
+        boolean a=tbltr.isEditing();
         if(a==false){
             JOptionPane.showMessageDialog(null, "Table tidak bisa di ubah");
         }
-    }//GEN-LAST:event_tblstMouseClicked
+    }//GEN-LAST:event_tbltrMouseClicked
 
     private void kembaliBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kembaliBtnMouseClicked
         new JmainMenu().setVisible(true);
@@ -396,6 +350,45 @@ public class Jwithdraw extends javax.swing.JFrame {
         }
                 
     }//GEN-LAST:event_txAmountKeyTyped
+
+    private void DepositWithActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DepositWithActionPerformed
+     
+        if (txtNIM.getText().isEmpty() || txAmount.getText().isEmpty()  )
+        {
+            JOptionPane.showMessageDialog(this, "Masukkan Nim atau Jumlah");
+        } else if(Integer.parseInt(saldo.getText()) < Integer.parseInt(txAmount.getText()))
+        {
+            JOptionPane.showMessageDialog(this, "Saldo Tidak Cukup !!");
+        }
+        else{
+            try {
+                withdraw_controller.code(idsetorLbl);
+                pIdtarik = idsetorLbl.getText();
+
+                pNim = txtNIM.getText();
+                pNama = Namelb.getText();
+                pWsaldo = Integer.parseInt(txAmount.getText());
+
+                java.util.Date date = new java.util.Date();
+                pDate = new java.sql.Date(date.getTime());
+
+                withdraw_controller.insert();
+                withdraw_controller.updatesaldo(pNim, pWsaldo);
+                
+                JOptionPane.showMessageDialog(this, "Sukses ditambah");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e);
+            }
+        }
+
+        showData();
+        clearData();
+        DepositWith.setEnabled(false);
+    }//GEN-LAST:event_DepositWithActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        DepositWith.setEnabled(false);
+    }//GEN-LAST:event_formComponentShown
 
     /**
      * @param args the command line arguments
@@ -434,7 +427,7 @@ public class Jwithdraw extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CheckBtn;
-    private javax.swing.JButton DepositBtn;
+    private javax.swing.JButton DepositWith;
     private javax.swing.JLabel JeniskelLb;
     private javax.swing.JLabel Jurusanlb;
     private javax.swing.JLabel Namelb;
@@ -449,7 +442,7 @@ public class Jwithdraw extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton kembaliBtn;
     private javax.swing.JLabel saldo;
-    private javax.swing.JTable tblst;
+    private javax.swing.JTable tbltr;
     private javax.swing.JTextField txAmount;
     private javax.swing.JTextField txtNIM;
     // End of variables declaration//GEN-END:variables

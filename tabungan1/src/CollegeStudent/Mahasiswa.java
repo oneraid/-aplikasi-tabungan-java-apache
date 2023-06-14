@@ -12,15 +12,12 @@ public class Mahasiswa extends Student{
     int tsaldo;
     String status;
         
-//    public Mahasiswa(String pNim, String pNama, String pJenisKelamin, String pJurusan,int pTSaldo, String pStatus){
-//        super(pNim,pNama,pJenisKelamin,pJurusan);
-//        this.tsaldo = pTSaldo;
-//        this.status = pStatus;
-//    }
-    
-    public Mahasiswa(){
-        
+    public Mahasiswa(String pNim, String pNama, String pJenisKelamin, String pJurusan,int pTSaldo, String pStatus){
+        super(pNim,pNama,pJenisKelamin,pJurusan);
+        this.tsaldo = pTSaldo;
+        this.status = pStatus;
     }
+    
 
     public int getTsaldo() {
         return tsaldo;
@@ -39,8 +36,8 @@ public class Mahasiswa extends Student{
     }
     
     
-
-    public static ResultSet getData(){
+    @Override
+    public ResultSet getData(){
      try {
        String sql = "SELECT * FROM mahasiswa";
        ResultSet rs = stmt.executeQuery(sql);
@@ -51,7 +48,7 @@ public class Mahasiswa extends Student{
      return null;
     }
     
-    public static ResultSet Data(String selected_nim){
+    public ResultSet Data(String selected_nim){
         try{
             String sql = "SELECT * FROM mahasiswa WHERE nim = ? ";
             sql = String.format(sql, selected_nim);

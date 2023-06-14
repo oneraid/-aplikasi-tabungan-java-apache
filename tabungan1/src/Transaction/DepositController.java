@@ -13,7 +13,10 @@ import javax.swing.JTextField;
 public class DepositController {
     private Deposit model;
     private JDeposit view;
-    Deposit deposit = new Deposit();
+    String pIdsetor, pNim, pNama;
+    Date pDate;
+    int pDsaldo; 
+    Deposit deposit = new Deposit(pIdsetor, pNim, pNama, pDate, pDsaldo);
 
     public DepositController(Deposit model, JDeposit view) {
         this.model = model;
@@ -22,7 +25,7 @@ public class DepositController {
     
     public void show(){
         try {
-            ResultSet result_data = Deposit.getData();
+            ResultSet result_data = deposit.getData();
             while (result_data.next()){
                 Object[] obj = new Object[5];
                 obj[0] = result_data.getString("id_setor");

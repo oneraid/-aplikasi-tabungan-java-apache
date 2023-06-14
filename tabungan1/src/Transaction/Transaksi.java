@@ -16,11 +16,11 @@ public abstract class Transaksi {
     private String nama;
     private Date date;
     
-//    public Transaksi(String pNim,String pNama,Date pDate){
-//        this.nim = pNim;
-//        this.nama = pNama;
-//        this.date = pDate;
-//    }
+    public Transaksi(String pNim,String pNama,Date pDate){
+        this.nim = pNim;
+        this.nama = pNama;
+        this.date = pDate;
+    }
     
     
     public String getNim() {
@@ -47,6 +47,7 @@ public abstract class Transaksi {
         this.date = date;
     } 
     
+    public abstract ResultSet getData();
     public abstract void codetx(JLabel kodeTransaksi);
     public abstract void tampildata( JTextField textFieldNim, JLabel labelNama, JLabel labelJurusan, JLabel labelJeniskelamin, JLabel saldo);
     public abstract void updatesaldo(String nim, int tsaldoBaru);
